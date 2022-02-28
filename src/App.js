@@ -1,11 +1,16 @@
-import './App.css';
+import React from 'react'
+import './App.scss'
 
 function App() {
   return (
-    <div className="App">
-aaa
+    <div className='app'>
+      <h1>Sticky Notes</h1>
+      <form className='note-form'>
+        <textarea placeholder='Create a new note...'></textarea>
+        <button>Add</button>
+      </form>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

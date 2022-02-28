@@ -1,0 +1,23 @@
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.app {
+  padding: 50px;
+  height: 100vh;
+  background-image: linear-gradient(rgba(#000, 0.6), rgba(#000, 0.6)),
+    url("assets/brick-wall.jpg");
+  background-size: cover;
+}
+
+h1{
+    color: white;
+    span{
+        display: block;
+        color: darken(white, 20%);
+        font-size: 14px;
+        font-style: italic;
+        height: 14px;
+    }
+}
