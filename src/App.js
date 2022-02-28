@@ -1,19 +1,25 @@
-import React from 'react'
-import './App.scss'
+import React, { useState } from "react";
+import "./App.scss";
 
 function App() {
+  const [noteInput, setNoteInput] = useState("");
 
-const addNote = () => {}
+  const addNote = () => {};
 
   return (
-    <div className='app'>
+    <div className="app">
       <h1>Sticky Notes</h1>
-      <form onSubmit={addNote} className='note-form'>
-        <textarea placeholder='Create a new note...'></textarea>
+      <form onSubmit={addNote} className="note-form">
+        <textarea
+          value={noteInput}
+          onChange={(event) => setNoteInput(event.target.value)}
+          placeholder="Create a new note..."
+        ></textarea>
         <button>Add</button>
       </form>
+      {noteInput}
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
