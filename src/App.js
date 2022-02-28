@@ -1,47 +1,73 @@
-import React, { useReducer, useState } from "react";
+import React, { useState, useReducer} from "react";
 import "./App.scss";
 
-const initialState ={
-  lastNoteCreated: null ,
-  totalNotes : 0 ,
-  notes : [] ,
-}
+//uuid
+import { v4 as uuid } from "uuid";
 
-const reducer = (state , action) => {
-  switch(action.type) {
-    case 'ADD_NOTE' : {
+const initialState = {
+  lastNoteCreated: null,
+  totalNotes: 0,
+  notes: [],
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "ADD_NOTE": {
       const newState = {
-        lastNoteCreated: new Date().toTimeString().slice(0 , 8) ,
-        totalNotes : state.notes.length + 1 ,
-        notes : [...state , action.payload] ,
-      }
-
-      return newState
+        lastNoteCreated: new Date().toTimeString().slice(0, 8),
+        totalNotes: state.notes.length + 1,
+        notes: [...state.notes, action.payload],
+      };
+      console.log(newState);
+      return newState;
     }
-    default : return state
+
+    default:
+      return state;
   }
-}
+};
 
-function App() {
+const App = () => {
   const [noteInput, setNoteInput] = useState("");
-  const [notesState , dispatch] = useReducer(reducer , initialState)
+  const [state, dispatch] = useReducer(reducer, initialState);
 
-  const addNote = () => {};
+  const addNote = (event) => {
+    event.preventDefault();
+
+    if (!noteInput) {
+      return;
+    }
+
+    const newNote = {
+      id: uuid(),
+      text: noteInput,
+      rotate: Math.floor(Math.random() * 20),
+    };
+
+    dispatch({ type: "ADD_NOTE", payload: newNote });
+    setNoteInput("");
+  };
 
   return (
     <div className="app">
       <h1>Sticky Notes</h1>
+
       <form onSubmit={addNote} className="note-form">
         <textarea
-          value={noteInput}
-          onChange={(event) => setNoteInput(event.target.value)}
           placeholder="Create a new note..."
+          value={noteInput}
+          onChange={(e) => setNoteInput(e.target.value)}
         ></textarea>
         <button>Add</button>
       </form>
-      {noteInput}
+
+      {state.notes.map((note) => (
+        <div className="note" key={note.id}>
+          <pre className="text">{note.text}</pre>
+        </div>
+      ))}
     </div>
   );
-}
+};
 
 export default App;
