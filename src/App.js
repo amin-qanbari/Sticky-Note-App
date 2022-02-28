@@ -1,8 +1,30 @@
-import React, { useState } from "react";
+import React, { useReducer, useState } from "react";
 import "./App.scss";
+
+const initialState ={
+  lastNoteCreated: null ,
+  totalNotes : 0 ,
+  notes : [] ,
+}
+
+const reducer = (state , action) => {
+  switch(action.type) {
+    case 'ADD_NOTE' : {
+      const newState = {
+        lastNoteCreated: new Date().toTimeString().slice(0 , 8) ,
+        totalNotes : state.notes.length + 1 ,
+        notes : [...state , action.payload] ,
+      }
+
+      return newState
+    }
+    default : return state
+  }
+}
 
 function App() {
   const [noteInput, setNoteInput] = useState("");
+  const [notesState , dispatch] = useReducer(reducer , initialState)
 
   const addNote = () => {};
 
