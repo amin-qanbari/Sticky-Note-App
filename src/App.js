@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useEffect } from "react";
 import "./App.scss";
 
 //uuid
@@ -22,14 +22,14 @@ const reducer = (state, action) => {
       return newState;
     }
 
-    case "DELETE_NOTE" : {
+    case "DELETE_NOTE": {
       const newState = {
-        ...state ,
-        totalNotes : state.notes.length - 1 ,
-        notes : state.notes.filter(note => note.id !== action.payload.id)
-      }
+        ...state,
+        totalNotes: state.notes.length - 1,
+        notes: state.notes.filter((note) => note.id !== action.payload.id),
+      };
 
-      return newState
+      return newState;
     }
 
     default:
@@ -39,7 +39,15 @@ const reducer = (state, action) => {
 
 const App = () => {
   const [noteInput, setNoteInput] = useState("");
-  const [state, dispatch] = useReducer(reducer, initialState);
+
+  const [state, dispatch] = useReducer(
+    reducer,
+    initialState,
+    (initial) => JSON.parse(localStorage.getItem("notes")) || initial
+  );
+  useEffect(() => {
+    localStorage.setItem("notes", JSON.stringify(state));
+  }, [state]);
 
   const addNote = (event) => {
     event.preventDefault();
@@ -70,9 +78,15 @@ const App = () => {
 
   return (
     <div className="app" onDragOver={dragOver}>
-      <h1>Sticky Notes ({state.totalNotes})
-      <span> {state.totalNotes > 0 ? `Last note created : ${state.lastNoteCreated}` : ''} </span>
-       </h1>
+      <h1>
+        Sticky Notes ({state.totalNotes})
+        <span>
+          {" "}
+          {state.totalNotes > 0
+            ? `Last note created : ${state.lastNoteCreated}`
+            : ""}{" "}
+        </span>
+      </h1>
 
       <form onSubmit={addNote} className="note-form">
         <textarea
@@ -91,7 +105,10 @@ const App = () => {
           draggable="true"
           onDragEnd={dropNote}
         >
-          <div className="close" onClick={() => dispatch({type : 'DELETE_NOTE' , payload : note})}>
+          <div
+            className="close"
+            onClick={() => dispatch({ type: "DELETE_NOTE", payload: note })}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6"
