@@ -22,7 +22,15 @@ const reducer = (state, action) => {
       return newState;
     }
 
+    case "DELETE_NOTE" : {
+      const newState = {
+        ...state ,
+        totalNotes : state.notes.length - 1 ,
+        notes : state.notes.filter(note => note.id !== action.payload.id)
+      }
 
+      return newState
+    }
 
     default:
       return state;
