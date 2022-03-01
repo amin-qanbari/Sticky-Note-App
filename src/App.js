@@ -1,4 +1,4 @@
-import React, { useState, useReducer} from "react";
+import React, { useState, useReducer } from "react";
 import "./App.scss";
 
 //uuid
@@ -21,6 +21,8 @@ const reducer = (state, action) => {
       console.log(newState);
       return newState;
     }
+
+
 
     default:
       return state;
@@ -48,8 +50,18 @@ const App = () => {
     setNoteInput("");
   };
 
+  const dropNote = (event) => {
+    event.target.style.left = `${event.pageX - 50}px`;
+    event.target.style.top = `${event.pageY - 50}px`;
+  };
+
+  const dragOver = (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+  };
+
   return (
-    <div className="app">
+    <div className="app" onDragOver={dragOver}>
       <h1>Sticky Notes</h1>
 
       <form onSubmit={addNote} className="note-form">
@@ -62,7 +74,29 @@ const App = () => {
       </form>
 
       {state.notes.map((note) => (
-        <div className="note" key={note.id}>
+        <div
+          className="note"
+          key={note.id}
+          style={{ transform: `rotate(${note.rotate}deg)` }}
+          draggable="true"
+          onDragEnd={dropNote}
+        >
+          <div className="close" onClick={() => dispatch({type : 'DELETE_NOTE' , payload : note})}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </div>
           <pre className="text">{note.text}</pre>
         </div>
       ))}
