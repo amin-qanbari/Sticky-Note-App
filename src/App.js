@@ -70,7 +70,9 @@ const App = () => {
 
   return (
     <div className="app" onDragOver={dragOver}>
-      <h1>Sticky Notes</h1>
+      <h1>Sticky Notes ({state.totalNotes})
+      <span> {state.totalNotes > 0 ? `Last note created : ${state.lastNoteCreated}` : ''} </span>
+       </h1>
 
       <form onSubmit={addNote} className="note-form">
         <textarea
